@@ -1,14 +1,15 @@
 import requests
-from bs4 import BeautifulSoup
 from pymongo import MongoClient
+from bs4 import BeautifulSoup
+
 
 # URL da Netflix
 netflix_url = "https://www.netflix.com/br/browse/genre/34399"
-
-client = MongoClient("localhost", 27017)  # Conecta ao MongoDB local
-  # Conecta ao MongoDB local
+client = MongoClient("mongodb://localhost:27017")  # Conecta ao MongoDB local
 db = client["netflix_catalog"]  # Nome do banco de dados
 collection = db["movies"]  # Nome da coleção
+
+
 
 # Função para fazer a solicitação e analisar a página da Netflix
 def crawl_netflix_catalog():
@@ -46,7 +47,7 @@ def crawl_netflix_catalog():
                     "artwork": artwork
                 }
                 result = collection.insert_one(movie_data)
-                print(result)
+                
                 if result != None:
                     print("Dados inseridos com sucesso no MongoDB.")
 
@@ -77,4 +78,4 @@ def buscar_filme_por_titulo(titulo):
 crawl_netflix_catalog()
 
 # Chamar a função de busca por título
-buscar_filme_por_titulo("The Queen's Gambit")
+buscar_filme_por_titulo("Ballerina")
