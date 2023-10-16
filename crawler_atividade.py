@@ -1,7 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
 from pymongo import MongoClient
-from ttbot import postar_no_twitter
 
 # URL da Netflix
 netflix_url = "https://www.netflix.com/br/browse/genre/34399"
@@ -46,10 +45,7 @@ def crawl_netflix_catalog():
                     "titulo": title,
                     "artwork": artwork
                 }
-                postar_no_twitter(title, categoria, artwork)
-                
                 result = collection.insert_one(movie_data)
-                
                 print(result)
                 if result != None:
                     print("Dados inseridos com sucesso no MongoDB.")
@@ -78,6 +74,7 @@ def buscar_filme_por_titulo(titulo):
         print(f"Ocorreu um erro: {e}")
 
 # Chamar a função para iniciar o web crawler e inserir os dados no MongoDB
-if __name__ == "__main__":
-    crawl_netflix_catalog()
+crawl_netflix_catalog()
 
+# Chamar a função de busca por título
+buscar_filme_por_titulo("The Queen's Gambit")
