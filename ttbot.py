@@ -16,15 +16,14 @@ client = "vertjWh1IqHDWHaBUw71ZNcOgfb2Ipa6PyuWnWrxvtEL2PpeX2"
 def postar_no_twitter(movie_data, oauth):
     try:        
         artwork_base64 = movie_data["Artwork"] # Imagem em base64
-        #converter para pn
-        artwork_base64 = artwork_base64.replace("data:image/jpeg;base64,", "")
-    
+        
         tweet_text = f"Confira o filme: '{movie_data['Titulo']}' \n Categoria '{movie_data['Categoria']}' \n' na Netflix! #Netfl/ix #Filmes"
 
         # Making the request
         response = oauth.post(
             "https://api.twitter.com/2/tweets",
             json={"text": tweet_text},
+            #image={"media_data": artwork_base64},
             )
         if response.status_code == 200:
             print(f"Tweet postado com sucesso para '{movie_data['Titulo']}'")
