@@ -25,14 +25,16 @@ def postar_no_twitter(titulo, categoria, artwork):
 
         tweet_text = f"Confira o filme '{titulo}' da categoria '{categoria}' na Netflix! #Netflix #Filmes"
 
-        api.update_with_media("movie_artwork.jpg", status=tweet_text)
+        api.get_media_upload_status("movie_artwork.jpg", status=tweet_text)
 
         print("Tweet postado com sucesso!")
 
     except Exception as e:
         print(f"Ocorreu um erro ao postar no Twitter: {e}")
 
-if __name__ == "__main":
+import time
+
+if __name__ == "__main__":
     # Chamar a função para postar no Twitter para cada filme no banco de dados
     client = MongoClient("localhost", 27017)  # Conecta ao MongoDB local
     db = client["netflix_catalog"]  # Nome do banco de dados
@@ -43,3 +45,5 @@ if __name__ == "__main":
         categoria = filme["categoria"]
         artwork = filme["artwork"]
         postar_no_twitter(titulo, categoria, artwork)
+        time.sleep(20) # Esperar 60 segundos para postar o próximo tweet
+    
