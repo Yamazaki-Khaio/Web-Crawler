@@ -1,6 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 from pymongo import MongoClient
+import base64
 
 # URL da Netflix
 netflix_url = "https://www.netflix.com/br/browse/genre/34399"
@@ -31,19 +32,31 @@ def crawl_netflix_catalog():
                 title = movie.find('span', class_='nm-collections-title-name').text
 
                 # Extraindo a URL da artwork (imagem)
-                artwork = movie.find('img', class_='nm-collections-title-img')['src']
+                artwork_url = movie.find('img', class_='nm-collections-title-img')['src']
 
+                # Fazer uma solicitação GET para a imagem da artwork
+                artwork_response = requests.get(artwork_url)
+
+                # Verificar se a solicitação foi bem-sucedida
+                if artwork_response.status_code == 200:
+                    # Converter a imagem para base64
+                    artwork_base64 = base64.b64encode(artwork_response.content).decode('utf-8')
+                    artwork_url = artwork_base64
+                    
+                else:
+                    print("Falha ao acessar a imagem da artwork")
+                    
                 # Exibindo o título e a URL da artwork
                 print("Categoria:", categoria)
                 print("Título:", title)
-                print("Artwork:", artwork)
+                print("Artwork:", "artwork_url")
                 print("\n")
 
                 # Inserir os dados no MongoDB
                 movie_data = {
                     "categoria": categoria,
                     "titulo": title,
-                    "artwork": artwork
+                    "artwork": artwork_url
                 }
                 result = collection.insert_one(movie_data)
                 print(result)
