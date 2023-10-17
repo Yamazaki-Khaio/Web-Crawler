@@ -1,3 +1,4 @@
+from stat import filemode
 from pymongo import MongoClient
 import time
 import tweepy
@@ -8,7 +9,6 @@ import gdown
 def postar_no_twitter(movie_data, oauth, client_auth):
     try:   
         image_url = movie_data["Artwork"]
-        print(image_url)
         media = None
         if image_url != "":
             path = "tmp/{}.jpg".format(str(movie_data["Titulo"]))
@@ -16,7 +16,7 @@ def postar_no_twitter(movie_data, oauth, client_auth):
             media = oauth.media_upload(filename=path)
          
         # Criar o texto do tweet        
-        tweet_text = f"Confira o filme: {movie_data['Titulo']}\n\nCategoria: {movie_data['Categoria']}\n\n na Netflix! #Netflix #Filmes"
+        tweet_text = f"Confira o filme: {movie_data['Titulo']}\n\nCategoria: {movie_data['Categoria']}\n\n na Netflix: {movie_data['Link']}!\n\n #Netflix #Filmes"
 
         # Making the request
         if media is not None:
@@ -58,7 +58,8 @@ if __name__ == "__main__":
         movie_data = {
             "Titulo": filme["titulo"],
             "Categoria": filme["categoria"],
-            "Artwork": filme["artwork"]
+            "Artwork": filme["artwork"],
+            "Link": filme["link"]
         }
         postar_no_twitter(movie_data, oauth, client_auth)
         time.sleep(300)  # Esperar 5 minutos entre as postagens
