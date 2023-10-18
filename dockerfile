@@ -16,4 +16,4 @@ COPY . .
 EXPOSE 3000
 
 # Define o comando padrão que será executado quando o contêiner for iniciado
-CMD [ "python" "crawler_atividade" ]
+CMD [ "python" "crawler_atividade.py"]
