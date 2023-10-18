@@ -2,6 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 from pymongo import MongoClient
 
+
 # URL da Netflix
 netflix_url = "https://www.netflix.com/br/browse/genre/34399"
 
@@ -31,19 +32,22 @@ def crawl_netflix_catalog():
                 title = movie.find('span', class_='nm-collections-title-name').text
 
                 # Extraindo a URL da artwork (imagem)
-                artwork = movie.find('img', class_='nm-collections-title-img')['src']
-
+                artwork_url = movie.find('img', class_='nm-collections-title-img')['src']
+                url_filme = movie.find('a', class_="nm-collections-title nm-collections-link")['href']
+                print(url_filme)    
+              
                 # Exibindo o título e a URL da artwork
                 print("Categoria:", categoria)
                 print("Título:", title)
-                print("Artwork:", artwork)
+                print("Artwork:", artwork_url)
                 print("\n")
 
                 # Inserir os dados no MongoDB
                 movie_data = {
                     "categoria": categoria,
                     "titulo": title,
-                    "artwork": artwork
+                    "artwork": artwork_url,
+                    "link": url_filme,
                 }
                 result = collection.insert_one(movie_data)
                 print(result)
@@ -77,4 +81,3 @@ def buscar_filme_por_titulo(titulo):
 crawl_netflix_catalog()
 
 # Chamar a função de busca por título
-buscar_filme_por_titulo("The Queen's Gambit")
