@@ -15,5 +15,6 @@ COPY . .
 # Expõe a porta 3000 do contêiner
 EXPOSE 3000
 
+
 # Define o comando padrão que será executado quando o contêiner for iniciado
-CMD [ "python" "crawler_atividade.py"]
+CMD [ "python3", "crawler_atividade.py", "run"]
