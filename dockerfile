@@ -2,7 +2,7 @@
 FROM python:3.7.3-alpine3.9
 
 # Define o diretório de trabalho dentro do contêiner
-WORKDIR /ap
+WORKDIR /app
 # Instala as dependências do projeto
 COPY requirements.txt ./
 
